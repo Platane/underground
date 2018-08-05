@@ -1,5 +1,4 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
-import { error } from '~/util/reporter'
 
 import { reduce, defaultState } from './reducer'
 
@@ -8,7 +7,6 @@ const crashReporterMiddleware = store => next => action => {
     return next(action)
   } catch (err) {
     err.action = action
-    error(err)
     throw err
   }
 }

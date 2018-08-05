@@ -1,6 +1,6 @@
 import fetch from '~/service/fetch'
 import { TFL_API_ID, TFL_API_KEY, TFL_API_URL } from '~/config'
-import type { Line, Stop } from '~/type'
+import type { Line, Stop, ArrivalTime, ID } from '~/type'
 
 const fetchFTL = (path, options = {}) =>
   fetch(TFL_API_URL + path, {
@@ -12,7 +12,7 @@ const fetchFTL = (path, options = {}) =>
     },
   })
 
-export const getAllLines = (): line[] =>
+export const getAllLines = (): Promise<Line[]> =>
   fetchFTL('/line/mode/tube').then(x =>
     x.map(({ id, name }) => ({
       id,
@@ -23,7 +23,7 @@ export const getAllLines = (): line[] =>
 // export const getLineStatus = (lineId): line[] =>
 //   fetchFTL(`/line/${lineId}/status`)
 
-export const getLineStops = (lineId): Stop[] =>
+export const getLineStops = (lineId: ID): Promise<Stop[]> =>
   fetchFTL(`/line/${lineId}/stoppoints`).then(x =>
     x.map(({ id, commonName, lat, lon }) => ({
       id,
@@ -32,7 +32,7 @@ export const getLineStops = (lineId): Stop[] =>
     }))
   )
 
-export const getNextArrivalsTime = stopId =>
+export const getNextArrivalsTime = (stopId: ID): Promise<ArrivalTime[]> =>
   fetchFTL(`/stoppoint/${stopId}/arrivals`).then(x =>
     x.map(
       ({

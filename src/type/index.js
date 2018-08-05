@@ -33,4 +33,8 @@ export type State = {
     path: string,
     param: { [string]: string },
   },
+
+  resource: {
+    lines: Lines[] | null,
+  },
 }

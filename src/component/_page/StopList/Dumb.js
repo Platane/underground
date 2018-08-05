@@ -18,12 +18,14 @@ export const StopList = ({ line, stops, lineColor }) => (
     <StopLine>
       <Line style={{ backgroundColor: lineColor }} />
 
-      {stops.map(stop => (
+      {(stops || []).map(stop => (
         <Row key={stop.id} href={`/line/${line.id}/stop/${stop.id}`}>
           <Tic style={{ backgroundColor: lineColor }} />
           <Name>{stop.name}</Name>
         </Row>
       ))}
+
+      {!stops && <Spinner />}
     </StopLine>
   </Container>
 )

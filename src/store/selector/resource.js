@@ -3,7 +3,7 @@ import { lines, stops } from '~/__fixtures__'
 import { line_color } from '~/constant/color'
 import type { State } from '~/type'
 
-export const selectLines = () => lines
+export const selectLines = (state: State) => state.resource.lines
 
 export const selectCurrentLineId = (state: State) =>
   state.router.param.lineId || null
@@ -16,10 +16,14 @@ export const selectCurrentLineColor = createSelector(
 export const selectCurrentLine = createSelector(
   selectLines,
   selectCurrentLineId,
-  (lines, lineId) => lines.find(x => x.id === lineId)
+  (lines, lineId) => lines && lines.find(x => x.id === lineId)
 )
 
-export const selectCurrentLineStops = () => stops
+export const selectCurrentLineStops = createSelector(
+  state => state.resource.stops_byLineId,
+  selectCurrentLineId,
+  (stops_byLineId, lineId) => stops_byLineId[lineId]
+)
 
 export const selectCurrentStopId = (state: State) =>
   state.router.param.stopId || null

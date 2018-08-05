@@ -1,5 +1,4 @@
 import { stringify } from 'querystring'
-import { error } from '~/util/reporter'
 
 const safeJSONparse = s => {
   try {
@@ -10,18 +9,14 @@ const safeJSONparse = s => {
 }
 
 export default (
-  url?: string,
-  { query = {}, method = 'GET', body, token, userId, headers = {} } = {}
+  url: string,
+  { query = {}, method = 'GET', body, headers = {} } = {}
 ) =>
   fetch(`${url}?${stringify(query)}`, {
     method: method || 'GET',
     body: (body && JSON.stringify(body)) || null,
     headers: {
       ...headers,
-      Authorization:
-        (userId && `Basic ${btoa(`${userId}:xxx`)}`) ||
-        (token && `Bearer ${token}`) ||
-        null,
       'content-type': (body && 'application/json') || null,
     },
   })
@@ -37,6 +32,5 @@ export default (
       return o
     })
     .catch(err => {
-      error(err)
       throw err
     })

@@ -6,7 +6,7 @@ import { Spinner } from '~/component/Spinner'
 
 export const Header = ({ line, lineColor }) => (
   <Container style={{ backgroundColor: lineColor }}>
-    <Name>{line.name}</Name>
+    <Name>{line && line.name}</Name>
   </Container>
 )
 

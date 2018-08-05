@@ -5,13 +5,14 @@ import { goTo } from '~/store/action/router'
 
 const DumbLink = ({ href, goTo, children, ...props }) => (
   <a
+    {...props}
     href={href}
     onClick={e => {
       e.preventDefault()
       goTo(href)
     }}
   >
-    {children}{' '}
+    {children}
   </a>
 )
 

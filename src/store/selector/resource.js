@@ -1,11 +1,17 @@
 import { createSelector } from 'reselect'
 import { lines, stops } from '~/__fixtures__'
+import { line_color } from '~/constant/color'
 import type { State } from '~/type'
 
 export const selectLines = () => lines
 
 export const selectCurrentLineId = (state: State) =>
-  state.router.params.lineId || null
+  state.router.param.lineId || null
+
+export const selectCurrentLineColor = createSelector(
+  selectCurrentLineId,
+  lineId => line_color[lineId]
+)
 
 export const selectCurrentLine = createSelector(
   selectLines,
@@ -16,7 +22,7 @@ export const selectCurrentLine = createSelector(
 export const selectCurrentLineStops = () => stops
 
 export const selectCurrentStopId = (state: State) =>
-  state.router.params.stopId || null
+  state.router.param.stopId || null
 
 export const selectCurrentStop = createSelector(
   selectCurrentLineStops,

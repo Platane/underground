@@ -31,6 +31,6 @@ export type State = {
   router: {
     key: string,
     path: string,
-    params: { [string]: string },
+    param: { [string]: string },
   },
 }

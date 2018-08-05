@@ -1,0 +1,54 @@
+{
+  "name": "underground",
+  "description": "...",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "9.9"
+  },
+  "dependencies": {
+    "declarative-router": "0.1.3",
+    "emotion": "9.1.3",
+    "node-fetch": "2.2.0",
+    "prop-types": "15.6.1",
+    "react": "16.4.2",
+    "react-dom": "^16.4.2",
+    "react-emotion": "9.2.6",
+    "react-propstransition": "2.0.6",
+    "react-redux": "5.0.7",
+    "redux": "4.0.0",
+    "unfetch": "3.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.0.0-beta.55",
+    "@babel/core": "7.0.0-beta.55",
+    "@babel/node": "7.0.0-beta.55",
+    "@babel/plugin-proposal-class-properties": "7.0.0-beta.55",
+    "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.55",
+    "@babel/plugin-transform-modules-commonjs": "7.0.0-beta.55",
+    "@babel/preset-env": "7.0.0-beta.55",
+    "@babel/preset-flow": "7.0.0-beta.55",
+    "@babel/preset-react": "7.0.0-beta.55",
+    "babel-loader": "8.0.0-beta.3",
+    "babel-plugin-flow-runtime": "0.17.0",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "browser-tap": "0.0.1",
+    "file-loader": "1.1.11",
+    "flow-bin": "0.71.0",
+    "flow-runtime": "0.17.0",
+    "prettier": "1.12.1",
+    "tap-spec": "4.1.1",
+    "tape": "4.9.0",
+    "webpack": "4.8.0",
+    "webpack-assets-manifest": "3.0.1",
+    "webpack-cli": "2.1.3",
+    "webpack-dev-server": "3.1.4"
+  },
+  "scripts": {
+    "start":
+      "webpack-dev-server --mode development --config ./script/webpack.config.js",
+    "test:browser":
+      "NODE_ENV=test webpack-dev-server --port 3001 --mode development --config ./script/webpack.config.test.js",
+    "test": "NODE_ENV=test babel-node ./src/__tests__/index.js | tap-spec"
+  }
+}

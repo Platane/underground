@@ -25,10 +25,14 @@ export const getAllLines = (): Promise<Line[]> =>
 
 export const getLineStops = (lineId: ID): Promise<Stop[]> =>
   fetchFTL(`/line/${lineId}/stoppoints`).then(x =>
-    x.map(({ id, commonName, lat, lon }) => ({
+    x.map(({ id, commonName, lat, lon, lines }) => ({
       id,
       name: commonName,
       geoPoint: { lat, lon },
+
+      // at this point, there is no way to tell which line is a tube line
+      // let's filter that later
+      linesIncludingBuses: lines.map(({ id, name }) => ({ id, name })),
     }))
   )
 

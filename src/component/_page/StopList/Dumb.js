@@ -21,6 +21,19 @@ export const StopList = ({ line, stops, lineColor }) => (
       {(stops || []).map(stop => (
         <Row key={stop.id} href={`/line/${line.id}/stop/${stop.id}`}>
           <Tic style={{ backgroundColor: lineColor }} />
+
+          <Branches>
+            {stop.lines
+              .filter(x => x.id !== line.id)
+              .map(({ name, id }) => (
+                <Branch
+                  key={id}
+                  style={{ backgroundColor: line_color[id] }}
+                  title={name}
+                />
+              ))}
+          </Branches>
+
           <Name>{stop.name}</Name>
         </Row>
       ))}
@@ -38,6 +51,20 @@ const Line = styled.div`
   bottom: 24px;
   top: 24px;
   left: 7px;
+`
+
+const Branches = styled.div`
+  min-width: 120px;
+
+  display: flex;
+  flex-direction: row;
+`
+const Branch = styled.div`
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+
+  margin-right: 6px;
 `
 
 const Container = styled.div`
@@ -59,7 +86,7 @@ const Tic = styled.div`
   height: 20px;
   border-radius: 50%;
 
-  margin-right: 20px;
+  margin-right: 16px;
 `
 
 const Name = styled.h3`

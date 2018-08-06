@@ -15,6 +15,8 @@ export type Stop = {
   id: ID,
   name: string,
   geoPoint: GeoPoint,
+
+  linesIncludingBuses: Line[],
 }
 
 export type ArrivalTime = {

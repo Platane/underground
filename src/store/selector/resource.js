@@ -19,10 +19,23 @@ export const selectCurrentLine = createSelector(
   (lines, lineId) => lines && lines.find(x => x.id === lineId)
 )
 
+const filterWhiteListLines = whiteListLines => lines =>
+  lines.filter(({ id }) => whiteListLines.some(x => x.id === id))
+
+const formatStop = lines =>
+  !lines
+    ? x => x
+    : ({ linesIncludingBuses, ...x }) => ({
+        ...x,
+        lines: filterWhiteListLines(lines)(linesIncludingBuses),
+      })
+
 export const selectCurrentLineStops = createSelector(
   state => state.resource.stops_byLineId,
   selectCurrentLineId,
-  (stops_byLineId, lineId) => stops_byLineId[lineId]
+  selectLines,
+  (stops_byLineId, lineId, lines) =>
+    stops_byLineId[lineId] && stops_byLineId[lineId].map(formatStop(lines))
 )
 
 export const selectCurrentStopId = (state: State) =>
@@ -31,5 +44,5 @@ export const selectCurrentStopId = (state: State) =>
 export const selectCurrentStop = createSelector(
   selectCurrentLineStops,
   selectCurrentStopId,
-  (stops, stopId) => stops.find(x => x.id === stopId)
+  (stops, stopId) => stops && stops.find(x => x.id === stopId)
 )

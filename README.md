@@ -2,7 +2,9 @@
 
 ## Note
 
-sometimes the arrival time api fails with a 200 status code and the body:
+_TFL API_
+
+* sometimes ( a lot actually ) the arrival time api fails with a 200 status code and the body:
 
 ```
 {
@@ -17,3 +19,5 @@ sometimes the arrival time api fails with a 200 status code and the body:
   "message": "An internal server error occurred."
 }
 ```
+
+* sometimes arrivals times are duplicated (?) or there is two / three train that arrived at the exact same time at the same platform, which I doubt.

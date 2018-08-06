@@ -15,31 +15,32 @@ export const StopList = ({ line, stops, lineColor }) => (
   <Container>
     <Header line={line} lineColor={lineColor} />
 
-    <StopLine>
-      <Line style={{ backgroundColor: lineColor }} />
+    <Center>
+      <StopLine>
+        <Line style={{ backgroundColor: lineColor }} />
 
-      {(stops || []).map(stop => (
-        <Row key={stop.id} href={`/line/${line.id}/stop/${stop.id}`}>
-          <Tic style={{ backgroundColor: lineColor }} />
+        {(stops || []).map(stop => (
+          <Row key={stop.id} href={`/line/${line.id}/stop/${stop.id}`}>
+            <Tic style={{ backgroundColor: lineColor }} />
 
-          <Branches>
-            {stop.lines
-              .filter(x => x.id !== line.id)
-              .map(({ name, id }) => (
-                <Branch
-                  key={id}
-                  style={{ backgroundColor: line_color[id] }}
-                  title={name}
-                />
-              ))}
-          </Branches>
+            <Branches>
+              {stop.lines
+                .filter(x => x.id !== line.id)
+                .map(({ name, id }) => (
+                  <Branch
+                    key={id}
+                    style={{ backgroundColor: line_color[id] }}
+                    title={name}
+                  />
+                ))}
+            </Branches>
 
-          <Name>{stop.name}</Name>
-        </Row>
-      ))}
-
+            <Name>{stop.name}</Name>
+          </Row>
+        ))}
+      </StopLine>
       {!stops && <Spinner />}
-    </StopLine>
+    </Center>
   </Container>
 )
 
@@ -55,7 +56,7 @@ const Line = styled.div`
 
 const Branches = styled.div`
   min-width: 120px;
-
+  flex-shrink: 0;
   display: flex;
   flex-direction: row;
 `
@@ -73,15 +74,18 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-// align-items: center;
-// justify-content: flex-start;
 
+const Center = styled.div`
+  margin: 0 auto;
+  position: relative;
+`
 const StopLine = styled.div`
   position: relative;
-  margin: 0 auto;
+  margin: 20px;
 `
 
 const Tic = styled.div`
+  flex-shrink: 0;
   width: 20px;
   height: 20px;
   border-radius: 50%;

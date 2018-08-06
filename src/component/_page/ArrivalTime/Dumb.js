@@ -9,13 +9,37 @@ import {
 import { Header } from '../StopList/Header'
 import { Link } from '~/component/Link'
 import { Spinner } from '~/component/Spinner'
+import { Destination } from './Destination'
 import { line_color } from '~/constant/color'
 
-export const ArrivalTime = ({ line, stop, lineColor }) => (
+export const ArrivalTime = ({ line, stop, lineColor, destinations }) => (
   <Container>
     <Header line={stop} lineColor={lineColor} />
+
+    <Center>
+      {!destinations && <Spinner />}
+
+      <DestinationList>
+        {(destinations || []).map(destination => (
+          <Destination key={destination.id || '_'} {...destination} />
+        ))}
+      </DestinationList>
+
+      {destinations &&
+        destinations.length === 0 && (
+          <span>
+            Wow! have you see the time ? There is obviously no train until
+            tomorrow. Seems like you are up for a walk{' '}
+          </span>
+        )}
+    </Center>
   </Container>
 )
+
+const Center = styled.div`
+  margin: 0 auto;
+`
+const DestinationList = styled.div``
 
 const Line = styled.div`
   width: 6px;

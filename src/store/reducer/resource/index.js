@@ -13,6 +13,15 @@ export const reduce = (state, action) => {
               [action.required.lineId]: action.res,
             },
           }
+
+        case 'stop:arrivalTimes':
+          return {
+            ...state,
+            arrivalTimes_byStopId: {
+              ...state.arrivalTimes_byStopId,
+              [action.required.stopId]: action.res,
+            },
+          }
       }
   }
   return state || defaultState
@@ -21,4 +30,5 @@ export const reduce = (state, action) => {
 export const defaultState = {
   lines: null,
   stops_byLineId: {},
+  arrivalTimes_byStopId: {},
 }

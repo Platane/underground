@@ -23,8 +23,8 @@ const selectRequired = createSelector(
 
       // one stop arrival times
       stopId && {
-        type: 'stops:arrivalTime',
-        key: `line:${lineId}:stop:${stopId}:arrivalTime`,
+        type: 'stop:arrivalTimes',
+        key: `stop:${stopId}:arrivalTimes`,
         lineId,
         stopId,
       },
@@ -58,7 +58,7 @@ export const init = store => {
         case 'line:stops':
           promise = getLineStops(required.lineId)
           break
-        case 'stop:arrivalTime':
+        case 'stop:arrivalTimes':
           promise = getNextArrivalsTime(required.stopId)
           break
       }

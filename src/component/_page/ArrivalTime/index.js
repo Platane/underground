@@ -4,11 +4,13 @@ import {
   selectCurrentLine,
   selectCurrentStop,
   selectCurrentLineColor,
+  selectCurrentStopArrivalTimesByDestination,
 } from '~/store/selector/resource'
 
 const injectState = connect(state => ({
   line: selectCurrentLine(state),
   stop: selectCurrentStop(state),
+  destinations: selectCurrentStopArrivalTimesByDestination(state),
   lineColor: selectCurrentLineColor(state),
 }))
 

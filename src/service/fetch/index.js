@@ -11,7 +11,7 @@ const safeJSONparse = s => {
 export default (
   url: string,
   { query = {}, method = 'GET', body, headers = {} } = {}
-) =>
+): any =>
   fetch(`${url}?${stringify(query)}`, {
     method: method || 'GET',
     body: (body && JSON.stringify(body)) || null,

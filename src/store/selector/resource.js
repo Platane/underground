@@ -46,3 +46,32 @@ export const selectCurrentStop = createSelector(
   selectCurrentStopId,
   (stops, stopId) => stops && stops.find(x => x.id === stopId)
 )
+
+export const selectCurrentStopArrivalTimes = createSelector(
+  state => state.resource.arrivalTimes_byStopId,
+  selectCurrentStopId,
+  selectCurrentLineId,
+  (arrivalTimes_byStopId, stopId, lineId) =>
+    arrivalTimes_byStopId[stopId] &&
+    arrivalTimes_byStopId[stopId].filter(x => x.lineId === lineId)
+)
+
+export const selectCurrentStopArrivalTimesByDestination = createSelector(
+  selectCurrentStopArrivalTimes,
+  arrivalTimes => {
+    if (!arrivalTimes) return null
+
+    const by_destination = {}
+
+    arrivalTimes.forEach(x =>
+      (by_destination[x.destinationId] =
+        by_destination[x.destinationId] || []).push(x)
+    )
+
+    return Object.keys(by_destination).map(id => ({
+      id,
+      name: by_destination[id][0].destinationName,
+      arrivalTimes: by_destination[id],
+    }))
+  }
+)

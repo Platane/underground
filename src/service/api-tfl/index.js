@@ -38,22 +38,24 @@ export const getLineStops = (lineId: ID): Promise<Stop[]> =>
 
 export const getNextArrivalsTime = (stopId: ID): Promise<ArrivalTime[]> =>
   fetchFTL(`/stoppoint/${stopId}/arrivals`).then(x =>
-    x.map(
-      ({
-        id,
-        lineId,
-        timeToLive,
-        platformName,
-        destinationName,
-        destinationNaptanId,
-      }) => ({
-        id,
-        lineId,
-        arrivalTime: timeToLive,
-        platformName,
+    x
+      .filter(({ modeName }) => modeName === 'tube')
+      .map(
+        ({
+          id,
+          lineId,
+          expectedArrival,
+          platformName,
+          destinationName,
+          destinationNaptanId,
+        }) => ({
+          id,
+          lineId,
+          arrivalTime: expectedArrival,
+          platformName,
 
-        destinationId: destinationNaptanId,
-        destinationName,
-      })
-    )
+          destinationId: destinationNaptanId,
+          destinationName,
+        })
+      )
   )

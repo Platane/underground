@@ -36,7 +36,10 @@ const fetchFailed = (required, error) => ({
   type: 'tfl:error',
   required,
   error,
+  errorMessage: error && error.message,
 })
+
+const REFRESH_DELAY = 100 * 60 * 3
 
 export const init = store => {
   const fetching = {}
@@ -45,32 +48,38 @@ export const init = store => {
     const state = store.getState()
 
     selectRequired(state).forEach(required => {
-      if (fetching[required.key]) return
+      if (
+        !fetching[required.key] ||
+        (required.type === 'stop:arrivalTimes' &&
+          Date.now() - fetching[required.key] > REFRESH_DELAY)
+      ) {
+        fetching[required.key] = Date.now()
 
-      fetching[required.key] = Date.now()
+        let promise
 
-      let promise
+        switch (required.type) {
+          case 'lines':
+            promise = getAllLines()
+            break
+          case 'line:stops':
+            promise = getLineStops(required.lineId)
+            break
+          case 'stop:arrivalTimes':
+            promise = getNextArrivalsTime(required.stopId)
+            break
+        }
 
-      switch (required.type) {
-        case 'lines':
-          promise = getAllLines()
-          break
-        case 'line:stops':
-          promise = getLineStops(required.lineId)
-          break
-        case 'stop:arrivalTimes':
-          promise = getNextArrivalsTime(required.stopId)
-          break
+        if (promise)
+          promise
+            .then(res => store.dispatch(hydrate(required, res)))
+            .catch(error => store.dispatch(fetchFailed(required, error)))
       }
-
-      if (promise)
-        promise
-          .then(res => store.dispatch(hydrate(required, res)))
-          .catch(error => store.dispatch(fetchFailed(required, error)))
     })
   }
 
   update()
+
+  setInterval(update, REFRESH_DELAY / 10)
 
   store.subscribe(update)
 }

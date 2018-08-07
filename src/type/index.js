@@ -37,6 +37,11 @@ export type State = {
   },
 
   resource: {
-    lines: Lines[] | null,
+    lines: Line[] | null,
+    status_byLineId: { [ID]: LineStatus | null },
+    stops_byLineId: { [ID]: Stop[] },
+    arrivalTimes_byStopId: { [ID]: ArrivalTime[] },
   },
 }
+
+export type LineStatus = 'unknown' | 'Good Service' | string

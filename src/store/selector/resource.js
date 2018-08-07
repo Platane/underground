@@ -38,6 +38,12 @@ export const selectCurrentLineStops = createSelector(
     stops_byLineId[lineId] && stops_byLineId[lineId].map(formatStop(lines))
 )
 
+export const selectCurrentLineStatus = createSelector(
+  state => state.resource.status_byLineId,
+  selectCurrentLineId,
+  (status_byLineId, lineId) => status_byLineId[lineId]
+)
+
 export const selectCurrentStopId = (state: State) =>
   state.router.param.stopId || null
 

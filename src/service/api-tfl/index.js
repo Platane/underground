@@ -20,8 +20,23 @@ export const getAllLines = (): Promise<Line[]> =>
     }))
   )
 
-// export const getLineStatus = (lineId): line[] =>
-//   fetchFTL(`/line/${lineId}/status`)
+export const getLineStatus = (lineId: ID): Status =>
+  fetchFTL(`/line/${lineId}/status`).then(x => {
+    // for whatever reason the result is an array
+    const { lineStatuses } = x.find(x => x.id === lineId)
+
+    const currentStatus =
+      // find the status with the current period
+      lineStatuses.find(
+        x => x.validityPeriods && x.validityPeriods.some(({ isNow }) => isNow)
+      ) ||
+      // or take the first one
+      lineStatuses[0]
+
+    if (!currentStatus) return 'unknown'
+
+    return currentStatus.statusSeverityDescription
+  })
 
 export const getLineStops = (lineId: ID): Promise<Stop[]> =>
   fetchFTL(`/line/${lineId}/stoppoints`).then(x =>
@@ -54,8 +69,8 @@ export const getNextArrivalsTime = (stopId: ID): Promise<ArrivalTime[]> =>
           arrivalTime: expectedArrival,
           platformName,
 
-          destinationId: destinationNaptanId,
-          destinationName,
+          destinationId: destinationNaptanId || null,
+          destinationName: destinationName || null,
         })
       )
   )

@@ -12,9 +12,15 @@ import { Spinner } from '~/component/Spinner'
 import { Destination } from './Destination'
 import { line_color } from '~/constant/color'
 
-export const ArrivalTime = ({ line, stop, lineColor, destinations }) => (
+export const ArrivalTime = ({
+  line,
+  stop,
+  lineColor,
+  lineStatus,
+  destinations,
+}) => (
   <Container>
-    <Header line={stop} lineColor={lineColor} />
+    <Header line={stop} lineColor={lineColor} lineStatus={lineStatus} />
 
     <Center>
       {!destinations && <Spinner />}

@@ -1,6 +1,11 @@
 import test from 'tape'
-import { getAllLines, getLineStops, getNextArrivalsTime } from '../index'
-import type { Line, Stop, ArrivalTime } from '~/type'
+import {
+  getAllLines,
+  getLineStatus,
+  getLineStops,
+  getNextArrivalsTime,
+} from '../index'
+import type { Line, Stop, ArrivalTime, LineStatus } from '~/type'
 
 test('api-tfl - getAllLines', async t => {
   const lines = await getAllLines()
@@ -14,7 +19,7 @@ test('api-tfl - getAllLines', async t => {
   t.end()
 })
 
-test('api-tfl - getLineNode', async t => {
+test('api-tfl - getLineStops', async t => {
   const [line] = await getAllLines()
 
   const stops = await getLineStops(line.id)
@@ -22,6 +27,20 @@ test('api-tfl - getLineNode', async t => {
   t.pass('request should succeed')
 
   stops.map(stop => Stop.assert(stop))
+
+  t.pass('type should match')
+
+  t.end()
+})
+
+test('api-tfl - getLineStatus', async t => {
+  const [line] = await getAllLines()
+
+  const status = await getLineStatus(line.id)
+
+  t.pass('request should succeed')
+
+  LineStatus.assert(status)
 
   t.pass('type should match')
 

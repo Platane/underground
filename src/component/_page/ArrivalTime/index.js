@@ -4,6 +4,7 @@ import {
   selectCurrentLine,
   selectCurrentStop,
   selectCurrentLineColor,
+  selectCurrentLineStatus,
   selectCurrentStopArrivalTimesByDestination,
 } from '~/store/selector/resource'
 
@@ -12,6 +13,7 @@ const injectState = connect(state => ({
   stop: selectCurrentStop(state),
   destinations: selectCurrentStopArrivalTimesByDestination(state),
   lineColor: selectCurrentLineColor(state),
+  lineStatus: selectCurrentLineStatus(state),
 }))
 
 export const ArrivalTime = injectState(Dumb)

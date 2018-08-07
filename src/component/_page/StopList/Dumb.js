@@ -11,9 +11,9 @@ import { Link } from '~/component/Link'
 import { Spinner } from '~/component/Spinner'
 import { line_color } from '~/constant/color'
 
-export const StopList = ({ line, stops, lineColor }) => (
+export const StopList = ({ line, stops, lineColor, lineStatus }) => (
   <Container>
-    <Header line={line} lineColor={lineColor} />
+    <Header line={line} lineColor={lineColor} lineStatus={lineStatus} />
 
     <Center>
       <StopLine>
@@ -23,17 +23,17 @@ export const StopList = ({ line, stops, lineColor }) => (
           <Row key={stop.id} href={`/line/${line.id}/stop/${stop.id}`}>
             <Tic style={{ backgroundColor: lineColor }} />
 
-            <Branches>
+            <Stops>
               {stop.lines
                 .filter(x => x.id !== line.id)
                 .map(({ name, id }) => (
-                  <Branch
+                  <Stop
                     key={id}
                     style={{ backgroundColor: line_color[id] }}
                     title={name}
                   />
                 ))}
-            </Branches>
+            </Stops>
 
             <Name>{stop.name}</Name>
           </Row>
@@ -54,13 +54,13 @@ const Line = styled.div`
   left: 7px;
 `
 
-const Branches = styled.div`
+const Stops = styled.div`
   min-width: 120px;
   flex-shrink: 0;
   display: flex;
   flex-direction: row;
 `
-const Branch = styled.div`
+const Stop = styled.div`
   width: 14px;
   height: 14px;
   border-radius: 50%;

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { formatDistance } from 'date-fns/formatDistance'
 
 export const withUpdatedTimes = C =>
   class WithUpdatedTimes extends Component {

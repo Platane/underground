@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const fetch = require('node-fetch')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
 
 const production = process.env.NODE_ENV === 'production'
@@ -66,15 +65,5 @@ module.exports = {
     watchOptions: {
       ignored: /node_modules/,
     },
-    before: app =>
-      app.get('/api-tfl-gov-uk-proxy/*', async (req, res) => {
-        const path = req.url.split('api-tfl-gov-uk-proxy/')[1]
-
-        const x = await fetch('https://api.tfl.gov.uk/' + path).then(res =>
-          res.json()
-        )
-
-        res.json(x)
-      }),
   },
 }

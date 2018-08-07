@@ -8,17 +8,9 @@ const safeJSONparse = s => {
   }
 }
 
-export default (
-  url: string,
-  { query = {}, method = 'GET', body, headers = {} } = {}
-): any =>
+export default (url: string, { query = {}, method = 'GET' } = {}): any =>
   fetch(`${url}?${stringify(query)}`, {
     method: method || 'GET',
-    body: (body && JSON.stringify(body)) || null,
-    headers: {
-      ...headers,
-      'content-type': (body && 'application/json') || null,
-    },
   })
     .then(async res => {
       const text = await res.text()

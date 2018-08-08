@@ -5,14 +5,24 @@ export const reduce = (state, action) => {
         case 'lines':
           return { ...state, lines: action.res }
 
-        case 'line:stops':
-          return {
+        case 'line:routes': {
+          const newState = {
             ...state,
-            stops_byLineId: {
-              ...state.stops_byLineId,
-              [action.required.lineId]: action.res,
+            routes_byLineId: {
+              ...state.routes_byLineId,
+              [action.required.lineId]: action.res.routes,
+            },
+            stations_byId: {
+              ...state.stations_byId,
             },
           }
+
+          action.res.stations.forEach(
+            station => (newState.stations_byId[station.id] = station)
+          )
+
+          return newState
+        }
 
         case 'line:status':
           return {
@@ -23,12 +33,12 @@ export const reduce = (state, action) => {
             },
           }
 
-        case 'stop:arrivalTimes':
+        case 'station:arrivalTimes':
           return {
             ...state,
             arrivalTimes_byStopId: {
               ...state.arrivalTimes_byStopId,
-              [action.required.stopId]: action.res,
+              [action.required.stationId]: action.res,
             },
           }
       }
@@ -38,7 +48,8 @@ export const reduce = (state, action) => {
 
 export const defaultState = {
   lines: null,
-  stops_byLineId: {},
+  stations_byId: {},
+  routes_byLineId: {},
   status_byLineId: {},
   arrivalTimes_byStopId: {},
 }

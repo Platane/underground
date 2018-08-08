@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'react-emotion'
 import { LineList } from '../_page/LineList'
-import { StopList } from '../_page/StopList'
+import { StationList } from '../_page/StationList'
 import { ArrivalTime } from '../_page/ArrivalTime'
 
 const Content = ({ router, ...props }) => {
@@ -9,8 +9,8 @@ const Content = ({ router, ...props }) => {
     case 'home':
       return <LineList {...props} />
     case 'line':
-      return <StopList {...props} />
-    case 'stop':
+      return <StationList {...props} />
+    case 'station':
       return <ArrivalTime {...props} />
     default:
       return null

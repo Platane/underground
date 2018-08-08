@@ -4,8 +4,9 @@ import {
   getLineStatus,
   getLineStops,
   getNextArrivalsTime,
+  getLineRoutes,
 } from '../index'
-import type { Line, Stop, ArrivalTime, LineStatus } from '~/type'
+import type { Line, Station, Route, ArrivalTime, LineStatus } from '~/type'
 
 test('api-tfl - getAllLines', async t => {
   const lines = await getAllLines()
@@ -19,16 +20,25 @@ test('api-tfl - getAllLines', async t => {
   t.end()
 })
 
-test('api-tfl - getLineStops', async t => {
-  const [line] = await getAllLines()
+test('api-tfl - getLineRoutes', async t => {
+  const line = (await getAllLines())[1]
 
-  const stops = await getLineStops(line.id)
+  const res = await getLineRoutes(line.id)
 
   t.pass('request should succeed')
 
-  stops.map(stop => Stop.assert(stop))
+  type Res = { stations: Station[], routes: Route[] }
+
+  Res.assert(res)
 
   t.pass('type should match')
+
+  t.assert(
+    res.routes.every(route =>
+      route.every(id => res.stations.some(s => s.id === id))
+    ),
+    'every point of each rotues should refer to a station'
+  )
 
   t.end()
 })
@@ -47,18 +57,18 @@ test('api-tfl - getLineStatus', async t => {
   t.end()
 })
 
-test('api-tfl - getNextArrivalsTime', async t => {
-  const [line] = await getAllLines()
-
-  const [stop] = await getLineStops(line.id)
-
-  const nextArrivalsTime = await getNextArrivalsTime(stop.id)
-
-  t.pass('request should succeed')
-
-  nextArrivalsTime.map(a => ArrivalTime.assert(a))
-
-  t.pass('type should match')
-
-  t.end()
-})
+// test('api-tfl - getNextArrivalsTime', async t => {
+//   const [line] = await getAllLines()
+//
+//   const [stop] = await getLineStops(line.id)
+//
+//   const nextArrivalsTime = await getNextArrivalsTime(stop.id)
+//
+//   t.pass('request should succeed')
+//
+//   nextArrivalsTime.map(a => ArrivalTime.assert(a))
+//
+//   t.pass('type should match')
+//
+//   t.end()
+// })

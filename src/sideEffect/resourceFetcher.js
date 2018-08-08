@@ -1,36 +1,33 @@
 import {
   getAllLines,
-  getLineStops,
+  getLineRoutes,
   getLineStatus,
   getNextArrivalsTime,
 } from '~/service/api-tfl'
 
-import {
-  selectCurrentLineId,
-  selectCurrentStopId,
-} from '~/store/selector/resource'
+import { selectCurrentLineId, selectCurrentStationId } from '~/store/selector'
 import { createSelector } from 'reselect'
 
 const selectRequired = createSelector(
   selectCurrentLineId,
-  selectCurrentStopId,
-  (lineId, stopId) =>
+  selectCurrentStationId,
+  (lineId, stationId) =>
     [
       // all the lines
       { type: 'lines', key: 'lines' },
 
-      // one line stops
-      lineId && { type: 'line:stops', key: `line:${lineId}:stops`, lineId },
+      // one line routes
+      lineId && { type: 'line:routes', key: `line:${lineId}:routes`, lineId },
 
       // one line status
       lineId && { type: 'line:status', key: `line:${lineId}:status`, lineId },
 
-      // one stop arrival times
-      stopId && {
-        type: 'stop:arrivalTimes',
-        key: `stop:${stopId}:arrivalTimes`,
+      // one station arrival times
+      stationId && {
+        type: 'station:arrivalTimes',
+        key: `station:${stationId}:arrivalTimes`,
         lineId,
-        stopId,
+        stationId,
       },
     ].filter(Boolean)
 )
@@ -59,7 +56,7 @@ export const init = store => {
         // it's not fetched yet
         !fetching[required.key] ||
         // or it's an arrival times request, and it should be refreshed
-        (required.type === 'stop:arrivalTimes' &&
+        (required.type === 'station:arrivalTimes' &&
           Date.now() - fetching[required.key] > REFRESH_ARRIVAL_TIMES_DELAY) ||
         // or it's an line status request, and it should be refreshed
         (required.type === 'line:status' &&
@@ -73,14 +70,14 @@ export const init = store => {
           case 'lines':
             promise = getAllLines()
             break
-          case 'line:stops':
-            promise = getLineStops(required.lineId)
+          case 'line:routes':
+            promise = getLineRoutes(required.lineId)
             break
           case 'line:status':
             promise = getLineStatus(required.lineId)
             break
-          case 'stop:arrivalTimes':
-            promise = getNextArrivalsTime(required.stopId)
+          case 'station:arrivalTimes':
+            promise = getNextArrivalsTime(required.stationId)
             break
         }
 

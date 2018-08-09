@@ -1,21 +1,40 @@
 type Grid = { id: any, k: number }[]
 
-const fill = (grid: Grid, [id, ...route_tail], k): Grid => {
-  if (!id) return grid
+const fill = (grid: Grid, route: any[], k): Grid => {
+  const [route_head, ...route_tail] = route
+  const [grid_head, ...grid_tail] = grid
 
-  const s = grid.findIndex(u => u.id === id)
+  if (!route_head) return grid
 
-  if (s === -1) {
-    const [grid_head, ...grid_tail] = grid
+  if (!grid_head) return route.map(id => ({ id, k }))
 
-    const g = [{ id, k }, ...fill(grid_tail, route_tail, k)]
+  // look for route head in grid
+  const s = grid.findIndex(u => u.id === route_head)
 
-    if (grid_head) g.splice(1, 0, grid_head)
+  // if found, route jump to the point on grid
+  if (s > -1)
+    return [...grid.slice(0, s + 1), ...fill(grid.slice(s + 1), route_tail, k)]
 
-    return g
-  }
+  //
 
-  return [...grid.slice(0, s + 1), ...fill(grid.slice(s + 1), route_tail, k)]
+  // look for grid head in route
+  const v = route.indexOf(grid_head.id)
+
+  // if found, found is copied to the grid util the mergin point
+  if (v > -1)
+    return [
+      ...route.slice(0, v).map(id => ({ id, k })),
+      grid_head,
+      ...fill(grid_tail, route.slice(v + 1), k),
+    ]
+
+  // if nothing else, not merge the two
+
+  const g = [{ id: route_head, k }, ...fill(grid_tail, route_tail, k)]
+
+  if (grid_head) g.splice(1, 0, grid_head)
+
+  return g
 }
 
 const mergeRouteInGrid = (grid, route, k): Grid => {

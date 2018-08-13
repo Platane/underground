@@ -2,16 +2,16 @@ import { connect } from 'react-redux'
 import { ArrivalTime as Dumb } from './Dumb'
 import {
   selectCurrentLine,
-  selectCurrentStop,
+  selectCurrentStation,
   selectCurrentLineColor,
   selectCurrentLineStatus,
-  selectCurrentStopArrivalTimesByDestination,
-} from '~/store/selector/resource'
+  selectCurrentStationArrivalTimesByDestination,
+} from '~/store/selector'
 
 const injectState = connect(state => ({
   line: selectCurrentLine(state),
-  stop: selectCurrentStop(state),
-  destinations: selectCurrentStopArrivalTimesByDestination(state),
+  station: selectCurrentStation(state),
+  destinations: selectCurrentStationArrivalTimesByDestination(state),
   lineColor: selectCurrentLineColor(state),
   lineStatus: selectCurrentLineStatus(state),
 }))

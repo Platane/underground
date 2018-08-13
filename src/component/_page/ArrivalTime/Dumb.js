@@ -6,7 +6,7 @@ import {
   grey,
   transitionUnit,
 } from '~/component/_abstract/palette'
-import { Header } from '../StopList/Header'
+import { Header } from '../StationList/Header'
 import { Link } from '~/component/Link'
 import { Spinner } from '~/component/Spinner'
 import { Destination } from './Destination'
@@ -14,13 +14,13 @@ import { line_color } from '~/constant/color'
 
 export const ArrivalTime = ({
   line,
-  stop,
+  station,
   lineColor,
   lineStatus,
   destinations,
 }) => (
   <Container>
-    <Header line={stop} lineColor={lineColor} lineStatus={lineStatus} />
+    <Header line={station} lineColor={lineColor} lineStatus={lineStatus} />
 
     <Center>
       {!destinations && <Spinner />}
@@ -66,7 +66,7 @@ const Container = styled.div`
 // align-items: center;
 // justify-content: flex-start;
 
-const StopLine = styled.div`
+const StationLine = styled.div`
   position: relative;
   margin: 0 auto;
 `

@@ -1,6 +1,6 @@
 import fetch from '~/service/fetch'
 import { TFL_API_ID, TFL_API_KEY, TFL_API_URL } from '~/config'
-import type { Line, Stop, ArrivalTime, ID } from '~/type'
+import type { Line, Station, Route, ArrivalTime, ID, LineStatus } from '~/type'
 
 const fetchFTL = (path, options = {}) =>
   fetch(TFL_API_URL + path, {
@@ -13,14 +13,43 @@ const fetchFTL = (path, options = {}) =>
   })
 
 export const getAllLines = (): Promise<Line[]> =>
-  fetchFTL('/line/mode/tube').then(x =>
-    x.map(({ id, name }) => ({
-      id,
-      name,
-    }))
+  fetchFTL('/line/mode/tube').then(x => x.map(parseLine))
+
+const parseStationName = x => x.split('Underground Station')[0].trim()
+
+const parseLine = ({ id, name }) => ({
+  id,
+  name,
+})
+
+const parseStation = ({ name, id, lat, lon, lines }) => ({
+  name: parseStationName(name),
+
+  id,
+  geoPoint: { lat, lon },
+
+  linesIncludingBuses: lines.map(parseLine),
+})
+
+const flat = arr => [].concat(...arr)
+
+export const getLineRoutes = (
+  lineId: ID
+): Promise<{ stations: Station[], routes: Route[] }> =>
+  fetchFTL(`/line/${lineId}/route/sequence/outbound`).then(
+    ({ orderedLineRoutes, stations, stopPointSequences }) => ({
+      // stations
+      stations: [
+        ...flat(stopPointSequences.map(({ stopPoint }) => stopPoint)),
+        ...stations,
+      ].map(parseStation),
+
+      //
+      routes: orderedLineRoutes.map(({ naptanIds }) => naptanIds),
+    })
   )
 
-export const getLineStatus = (lineId: ID): Status =>
+export const getLineStatus = (lineId: ID): Promise<LineStatus> =>
   fetchFTL(`/line/${lineId}/status`).then(x => {
     // for whatever reason the result is an array
     const { lineStatuses } = x.find(x => x.id === lineId)
@@ -37,19 +66,6 @@ export const getLineStatus = (lineId: ID): Status =>
 
     return currentStatus.statusSeverityDescription
   })
-
-export const getLineStops = (lineId: ID): Promise<Stop[]> =>
-  fetchFTL(`/line/${lineId}/stoppoints`).then(x =>
-    x.map(({ id, commonName, lat, lon, lines }) => ({
-      id,
-      name: commonName,
-      geoPoint: { lat, lon },
-
-      // at this point, there is no way to tell which line is a tube line
-      // let's filter that later
-      linesIncludingBuses: lines.map(({ id, name }) => ({ id, name })),
-    }))
-  )
 
 export const getNextArrivalsTime = (stopId: ID): Promise<ArrivalTime[]> =>
   fetchFTL(`/stoppoint/${stopId}/arrivals`).then(x =>
@@ -70,7 +86,9 @@ export const getNextArrivalsTime = (stopId: ID): Promise<ArrivalTime[]> =>
           platformName,
 
           destinationId: destinationNaptanId || null,
-          destinationName: destinationName || null,
+          destinationName: destinationName
+            ? parseStationName(destinationName)
+            : null,
         })
       )
   )

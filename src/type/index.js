@@ -11,7 +11,9 @@ export type GeoPoint = {
   lon: number,
 }
 
-export type Stop = {
+export type Route = ID[]
+
+export type Station = {
   id: ID,
   name: string,
   geoPoint: GeoPoint,
@@ -29,19 +31,4 @@ export type ArrivalTime = {
   destinationName: string | null,
 }
 
-export type State = {
-  router: {
-    key: string,
-    path: string,
-    param: { [string]: string },
-  },
-
-  resource: {
-    lines: Line[] | null,
-    status_byLineId: { [ID]: LineStatus | null },
-    stops_byLineId: { [ID]: Stop[] },
-    arrivalTimes_byStopId: { [ID]: ArrivalTime[] },
-  },
-}
-
-export type LineStatus = 'unknown' | 'Good Service' | string
+export type LineStatus = 'unknown' | 'Good Service' | 'Part Suspended' | string

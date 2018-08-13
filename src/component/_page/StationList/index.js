@@ -1,18 +1,18 @@
 import { connect } from 'react-redux'
-import { StopList as Dumb } from './Dumb'
+import { StationList as Dumb } from './Dumb'
 import {
   selectCurrentLine,
   selectCurrentLineStatus,
   selectCurrentLineColor,
-  selectCurrentLineStops,
-} from '~/store/selector/resource'
+  selectCurrentLineStationsMesh,
+} from '~/store/selector'
 import { line_color } from '~/constant/color'
 
 const injectState = connect(state => ({
   line: selectCurrentLine(state),
   lineStatus: selectCurrentLineStatus(state),
-  stops: selectCurrentLineStops(state),
   lineColor: selectCurrentLineColor(state),
+  mesh: selectCurrentLineStationsMesh(state),
 }))
 
-export const StopList = injectState(Dumb)
+export const StationList = injectState(Dumb)

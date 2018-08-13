@@ -4,7 +4,7 @@ import { white, transitionUnit } from '~/component/_abstract/palette'
 
 const flat = arr => [].concat(...arr)
 
-export const Lines = ({ segments, color }) => {
+export const Lines = ({ segments, points, color }) => {
   if (!segments || !segments[0]) return null
 
   const mx = 30
@@ -17,24 +17,25 @@ export const Lines = ({ segments, color }) => {
     arr.map(({ x, y }) => ({ x: x * mx, y: y * my }))
   )
 
-  const points = flat(segments_)
+  const points_ = points.map(({ x, y }) => ({ x: x * mx, y: y * my }))
 
-  const max_x = Math.max(...points.map(({ x }) => x))
-  const max_y = Math.max(...points.map(({ y }) => y)) - 1
+  const min_x = Math.min(...points_.map(({ x }) => x))
+  const max_x = Math.max(...points_.map(({ x }) => x))
+  const max_y = Math.max(...points_.map(({ y }) => y)) - 1
 
-  const width = max_x + l * 2
+  const width = max_x - min_x + l * 2
   const height = max_y + l * 2
 
   return (
     <Container
-      viewBox={`${-l} ${-l} ${width} ${height}`}
+      viewBox={`${-l + min_x} ${-l} ${width} ${height}`}
       style={{ width, height, margin: `${-l}px` }}
     >
       {segments_.map(([a, b], i) => (
         <Line key={i} stroke={color} d={`M${a.x} ${a.y}L${b.x} ${b.y}`} />
       ))}
 
-      {points.map(({ x, y }, i) => (
+      {points_.map(({ x, y }, i) => (
         <Dot key={i} fill={color} cx={x} cy={y} r={r} />
       ))}
     </Container>
@@ -48,6 +49,7 @@ const Container = styled.svg`
 const Line = styled.path`
   fill: none;
   stroke-width: 5px;
+  stroke-linecap: round;
 `
 const Dot = styled.circle`
   stroke: none;

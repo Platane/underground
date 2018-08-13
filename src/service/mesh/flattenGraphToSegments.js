@@ -20,18 +20,36 @@ export const flattenGraphToSegments = (flatGraph: FlatGraph, graph: Graph) => {
 
   flatGraph.forEach(arr =>
     arr.forEach((key, x) => {
-      coord_byId[key] = { x, y: line.length }
+      coord_byId[key] = {
+        x,
+        y: line.length,
+      }
 
       line.push(key)
     })
   )
 
-  const segments: [Point, Point][] = graphToEdges(graph).map(([a, b]) => [
-    coord_byId[a],
-    coord_byId[b],
-  ])
+  const segments: [Point, Point][] = [].concat(
+    ...graphToEdges(graph).map(([a, b]) => {
+      const pa = coord_byId[a]
+      const pb = coord_byId[b]
+
+      if (pa.x === pb.x) return [[pa, pb]]
+
+      const top = pa.x > pb.x ? pa : pb
+      const bottom = pa.x > pb.x ? pb : pa
+
+      const pc = {
+        x: top.x,
+        y: bottom.y < top.y ? bottom.y + 1 : bottom.y - 1,
+      }
+
+      return [[pa, pc], [pc, pb]]
+    })
+  )
 
   return {
+    points: line.map(id => coord_byId[id]),
     segments,
     line,
   }

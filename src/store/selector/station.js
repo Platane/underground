@@ -41,12 +41,13 @@ export const selectCurrentLineStationsMesh = createSelector(
 
     const graph = buildGraph(routes)
 
-    const { line, segments } = flattenGraphToSegments(
+    const { line, points, segments } = flattenGraphToSegments(
       flattenGraph(graph),
       graph
     )
 
     return {
+      points,
       segments,
       stations: line.map(id => station_byId[id]).map(formatStation(lines)),
     }

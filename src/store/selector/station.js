@@ -1,6 +1,10 @@
 import { createSelector } from 'reselect'
 import { selectLines, selectCurrentLineId } from './line'
-import { createMesh, extractLines } from '~/service/mesh'
+import {
+  buildGraph,
+  flattenGraph,
+  flattenGraphToSegments,
+} from '~/service/mesh'
 import type { State } from '~/type'
 
 export const selectCurrentStationId = (state: State) =>
@@ -35,11 +39,16 @@ export const selectCurrentLineStationsMesh = createSelector(
 
     if (!routes) return null
 
-    const mesh = createMesh(routes)
+    const graph = buildGraph(routes)
+
+    const { line, segments } = flattenGraphToSegments(
+      flattenGraph(graph),
+      graph
+    )
 
     return {
-      lines: extractLines(mesh, routes),
-      stations: mesh.map(u => stations_byId[u.id]).map(formatStation(lines)),
+      segments,
+      stations: line.map(id => stations_byId[id]).map(formatStation(lines)),
     }
   }
 )

@@ -4,8 +4,8 @@ import { white, transitionUnit } from '~/component/_abstract/palette'
 
 const flat = arr => [].concat(...arr)
 
-export const Lines = ({ lines, color }) => {
-  if (!lines || !lines[0]) return null
+export const Lines = ({ segments, color }) => {
+  if (!segments || !segments[0]) return null
 
   const mx = 30
   const my = 50
@@ -13,11 +13,11 @@ export const Lines = ({ lines, color }) => {
 
   const l = 12
 
-  const lines_ = lines.map(line =>
-    line.map(({ x, y }) => ({ x: (x - 1) * mx, y: y * my }))
+  const segments_ = segments.map(arr =>
+    arr.map(({ x, y }) => ({ x: x * mx, y: y * my }))
   )
 
-  const points = flat(lines_)
+  const points = flat(segments_)
 
   const max_x = Math.max(...points.map(({ x }) => x))
   const max_y = Math.max(...points.map(({ y }) => y)) - 1
@@ -30,12 +30,8 @@ export const Lines = ({ lines, color }) => {
       viewBox={`${-l} ${-l} ${width} ${height}`}
       style={{ width, height, margin: `${-l}px` }}
     >
-      {lines_.map((line, i) => (
-        <Line
-          key={i}
-          stroke={color}
-          d={'M' + line.map(({ x, y }) => x + ' ' + y).join('L')}
-        />
+      {segments_.map(([a, b], i) => (
+        <Line key={i} stroke={color} d={`M${a.x} ${a.y}L${b.x} ${b.y}`} />
       ))}
 
       {points.map(({ x, y }, i) => (

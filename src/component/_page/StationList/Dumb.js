@@ -19,7 +19,7 @@ export const StationList = ({ line, mesh, lineColor, lineStatus }) => (
     <Center>
       <Table>
         <div style={{ margin: '24px 20px 0 0' }}>
-          <Lines color={lineColor} lines={(mesh && mesh.lines) || []} />
+          <Lines color={lineColor} segments={(mesh && mesh.segments) || []} />
         </div>
 
         <StationLine>

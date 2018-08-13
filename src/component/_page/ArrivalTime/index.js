@@ -5,12 +5,13 @@ import {
   selectCurrentStation,
   selectCurrentLineColor,
   selectCurrentLineStatus,
+  selectCurrentStationArrivalTimesByDestination,
 } from '~/store/selector'
 
 const injectState = connect(state => ({
   line: selectCurrentLine(state),
   station: selectCurrentStation(state),
-  destinations: [],
+  destinations: selectCurrentStationArrivalTimesByDestination(state),
   lineColor: selectCurrentLineColor(state),
   lineStatus: selectCurrentLineStatus(state),
 }))

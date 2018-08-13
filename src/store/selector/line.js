@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { line_color } from '~/constant/color'
-import type { State } from '~/type'
+import type { State } from '~/store/reducer'
 
 export const selectLines = (state: State) => state.resource.lines
 

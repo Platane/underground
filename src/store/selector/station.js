@@ -5,17 +5,17 @@ import {
   flattenGraph,
   flattenGraphToSegments,
 } from '~/service/mesh'
-import type { State } from '~/type'
+import type { State } from '~/store/reducer'
 
 export const selectCurrentStationId = (state: State) =>
   state.router.param.stationId || null
 
 export const selectCurrentStation = createSelector(
-  state => state.resource.stations_byId,
+  state => state.resource.station_byId,
   selectCurrentStationId,
   selectLines,
-  (stations_byId, stationId, lines) =>
-    stations_byId[stationId] && formatStation(lines)(stations_byId[stationId])
+  (station_byId, stationId, lines) =>
+    station_byId[stationId] && formatStation(lines)(station_byId[stationId])
 )
 
 const filterWhiteListLines = whiteListLines => lines =>
@@ -30,11 +30,11 @@ const formatStation = lines =>
       })
 
 export const selectCurrentLineStationsMesh = createSelector(
-  state => state.resource.stations_byId,
+  state => state.resource.station_byId,
   state => state.resource.routes_byLineId,
   selectCurrentLineId,
   selectLines,
-  (stations_byId, routes_byLineId, lineId, lines) => {
+  (station_byId, routes_byLineId, lineId, lines) => {
     const routes = routes_byLineId[lineId]
 
     if (!routes) return null
@@ -48,7 +48,7 @@ export const selectCurrentLineStationsMesh = createSelector(
 
     return {
       segments,
-      stations: line.map(id => stations_byId[id]).map(formatStation(lines)),
+      stations: line.map(id => station_byId[id]).map(formatStation(lines)),
     }
   }
 )

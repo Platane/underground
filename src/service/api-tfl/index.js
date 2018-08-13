@@ -86,7 +86,9 @@ export const getNextArrivalsTime = (stopId: ID): Promise<ArrivalTime[]> =>
           platformName,
 
           destinationId: destinationNaptanId || null,
-          destinationName: destinationName || null,
+          destinationName: destinationName
+            ? parseStationName(destinationName)
+            : null,
         })
       )
   )

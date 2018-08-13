@@ -3,7 +3,13 @@ import { routes } from './routes'
 
 const resolveRoute = createRouteResolver(routes)
 
-export const defaultState = {
+export type State = {
+  key: string,
+  path: string,
+  param: { [string]: string },
+}
+
+export const defaultState: State = {
   query: {},
   hash: '',
   ...resolveRoute('/'),

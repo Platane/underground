@@ -67,7 +67,12 @@ module.exports = {
 
   devServer: {
     port: 8083,
-    historyApiFallback: true,
+    open: '/underground',
+    historyApiFallback: {
+      rewrites: [
+        { from: /^\/underground\/.*/, to: '/underground/index.html' },
+      ],
+    },
     watchOptions: {
       ignored: /node_modules/,
     },

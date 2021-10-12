@@ -3,10 +3,12 @@ import React from 'react'
 
 import { goTo } from '~/store/action/router'
 
+const pathPrefix = '/'+(process.env.PUBLIC_PATH || '/').split('/').filter(Boolean).join('/')
+
 const DumbLink = ({ href, goTo, children, ...props }) => (
   <a
     {...props}
-    href={href}
+    href={pathPrefix+href}
     onClick={e => {
       e.preventDefault()
       goTo(href)
